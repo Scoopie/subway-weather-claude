@@ -33,15 +33,16 @@
 Build a web application that visualizes temperature data along travel routes using a subway-style map interface. Users input start/end addresses, view temperature-coded route lines with location markers, and have their routes persist across sessions. Angular 20+ with zoneless architecture, signals, and Weather Underground API integration.
 
 ## Technical Context
-**Language/Version**: TypeScript 5.7+, Angular 20+ (zoneless with signals)  
-**Primary Dependencies**: Angular CLI, Vite, Tailwind CSS, Vitest, Playwright  
-**Storage**: LocalStorage/SessionStorage for route persistence, Weather Underground API for temperature data  
-**Testing**: Vitest (unit), Playwright (e2e)  
+**Language/Version**: TypeScript 5.7+, Angular 20+ (zoneless with signals)
+**Primary Dependencies**: Angular CLI, Vite, Tailwind CSS, Vitest, Playwright
+**Storage**: LocalStorage/SessionStorage for route persistence, direct API integration
+**Testing**: Vitest (unit), Playwright (e2e)
 **Target Platform**: Modern web browsers (Chrome 90+, Firefox 88+, Safari 14+)
-**Project Type**: web - frontend SPA with external API integration  
-**Performance Goals**: <2s initial load, <500ms route calculation, 60fps animations  
-**Constraints**: Weather Underground API rate limits, browser local storage limits (~5-10MB)  
+**Project Type**: web - frontend SPA with direct API integration
+**Performance Goals**: <2s initial load, <500ms route calculation, 60fps animations
+**Constraints**: API rate limits, browser local storage limits (~5-10MB)
 **Scale/Scope**: Single-user sessions, ~50 route points max, mobile-responsive design
+**Security**: Domain-restricted API keys, HTTPS-only, rate limiting on client-side
 
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
@@ -126,7 +127,26 @@ ios/ or android/
 └── [platform-specific structure]
 ```
 
-**Structure Decision**: [DEFAULT to Option 1 unless Technical Context indicates web/mobile app]
+**Structure Decision**: Option 1 - Single project (frontend SPA with direct API integration)
+
+**Implementation Architecture**:
+```
+Temperature Route Visualizer Architecture
+
+┌─────────────────────────────────────┐    HTTPS/Domain-Restricted    ┌─────────────────┐
+│                                     │ ──────────────────────────► │                 │
+│           Angular 20+               │                               │  External APIs  │
+│          Frontend SPA               │ ◄────────────────────────── │                 │
+│                                     │     Direct API Calls          │ • Weather Underground
+│  • UI Components & Visualization   │                               │ • Google Places     │
+│  • Local Storage & State Management │                               │ • OpenRouteService  │
+│  • Client-side Rate Limiting       │                               └─────────────────┘
+│  • Domain-Restricted API Keys      │
+└─────────────────────────────────────┘
+
+Security: Domain-restricted public API keys, client-side rate limiting, HTTPS-only
+Note: Backend proxy can be added later on feature branch for enhanced security
+```
 
 ## Phase 0: Outline & Research
 1. **Extract unknowns from Technical Context** above:
