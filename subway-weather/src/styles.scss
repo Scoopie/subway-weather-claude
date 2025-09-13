@@ -1,8 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/* Tailwind CSS v4 setup using @use syntax (per Angular Tailwind guide). */
+@use "tailwindcss";
 
 /* Custom styles for subway map visualization */
 .subway-line {
@@ -22,3 +19,9 @@
   stroke-width: 3;
   filter: brightness(1.1);
 }
+
+/* Example utility extension layer (add if/when needed)
+@layer utilities {
+  .route-temp-gradient { @apply from-temp-cool to-temp-hot bg-gradient-to-r; }
+}
+*/

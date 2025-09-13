@@ -72,15 +72,7 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "buildTarget": "subway-weather:build:development",
-            "runner": "vitest",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": ["src/styles.scss"]
+            "runner": "vitest"
           }
         },
         "lint": {
@@ -93,6 +85,9 @@
     }
   },
   "cli": {
-    "schematicCollections": ["angular-eslint"]
+    "schematicCollections": [
+      "angular-eslint"
+    ],
+    "analytics": false
   }
 }

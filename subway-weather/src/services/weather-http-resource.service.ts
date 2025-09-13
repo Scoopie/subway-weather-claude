@@ -1,5 +1,4 @@
-import { Injectable, inject } from '@angular/core';
-import { resource, ResourceRef } from '@angular/core';
+import { Injectable, inject, resource, ResourceRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
@@ -39,24 +38,28 @@ export class WeatherHttpResourceService {
    * Using Angular's experimental resource() function for reactive data fetching
    */
   createTemperatureResource(coordinates: Coordinates): ResourceRef<TemperatureReading> {
+    // resource() currently expects a loader function only (no custom request param shape)
     return resource({
-      request: () => coordinates,
-      loader: async ({ request }) => {
-        const url = this.buildWeatherUrl(request);
-
+      defaultValue: {
+        value: NaN,
+        unit: 'celsius',
+        timestamp: new Date(0),
+        coordinates,
+        source: 'uninitialized'
+      },
+      loader: async () => {
+        const url = this.buildWeatherUrl(coordinates);
         try {
           const response = await this.http.get<WeatherResponse>(url).toPromise();
-
           if (!response?.current_observation) {
             throw new Error('Invalid weather data received');
           }
-
-          return this.mapToTemperatureReading(response, request);
+          return this.mapToTemperatureReading(response, coordinates);
         } catch (error) {
           console.error('Weather API error:', error);
           throw new Error(`Failed to fetch weather data: ${error}`);
         }
-      },
+      }
     });
   }
 
@@ -66,32 +69,26 @@ export class WeatherHttpResourceService {
    */
   createBatchTemperatureResource(coordinatesList: Coordinates[]): ResourceRef<TemperatureReading[]> {
     return resource({
-      request: () => coordinatesList,
-      loader: async ({ request }) => {
-        // Batch requests with rate limiting
+      defaultValue: [],
+      loader: async () => {
         const results: TemperatureReading[] = [];
         const batchSize = environment.rateLimits.weather.burstLimit;
-
-        for (let i = 0; i < request.length; i += batchSize) {
-          const batch = request.slice(i, i + batchSize);
-          const batchPromises = batch.map(coords =>
+        for (let i = 0; i < coordinatesList.length; i += batchSize) {
+          const batch = coordinatesList.slice(i, i + batchSize);
+          const batchPromises = batch.map((coords: Coordinates) =>
             this.fetchSingleTemperature(coords).catch(error => {
               console.warn('Failed to fetch temperature for coordinates:', coords, error);
               return this.createFallbackReading(coords);
             })
           );
-
           const batchResults = await Promise.all(batchPromises);
           results.push(...batchResults);
-
-          // Add delay between batches to respect rate limits
-          if (i + batchSize < request.length) {
+          if (i + batchSize < coordinatesList.length) {
             await this.delay(60000 / environment.rateLimits.weather.requestsPerMinute);
           }
         }
-
         return results;
-      },
+      }
     });
   }
 
