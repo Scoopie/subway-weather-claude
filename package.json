@@ -1,0 +1,8 @@
+{
+  "name": "subway-weather-claude",
+  "version": "0.0.1",
+  "private": true,
+  "volta": {
+    "node": "22.19.0"
+  }
+}
