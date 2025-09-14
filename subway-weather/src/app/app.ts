@@ -9,4 +9,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('subway-weather');
+  private static readonly TIME_FORMAT: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+  protected readonly currentTime = signal(new Date().toLocaleTimeString([], App.TIME_FORMAT));
 }
