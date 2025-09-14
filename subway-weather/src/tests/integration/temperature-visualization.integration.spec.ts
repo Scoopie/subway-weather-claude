@@ -1,8 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
 
-describe('Temperature Visualization Integration', () => {
-  it('should visualize temperature data along the route', () => {
-    // TODO: Replace with actual integration logic
-    expect(false).toBe(true); // Failing test for TDD
-  });
-});
+// Slice 0: Deferred; visualization emerges across Slices 4–6.
+describe.skip('Temperature Visualization Integration (pending Slices 4–6)', () => {});

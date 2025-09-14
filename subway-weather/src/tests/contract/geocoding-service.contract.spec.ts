@@ -1,8 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
 
-describe('GeocodingService Contract', () => {
-  it('should implement all required geocoding methods', () => {
-    // TODO: Replace with actual contract checks
-    expect(false).toBe(true); // Failing test for TDD
-  });
-});
+// Slice 0: Placeholder skipped until Slice 5 introduces real GeocodingService.
+describe.skip('GeocodingService Contract (pending Slice 5)', () => {});

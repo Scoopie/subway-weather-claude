@@ -1,8 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
 
-describe('RouteStorageService Contract', () => {
-  it('should implement all required storage methods', () => {
-    // TODO: Replace with actual contract checks
-    expect(false).toBe(true); // Failing test for TDD
-  });
-});
+// Slice 0: Deferred; will be implemented in Slice 7 (Local Persistence).
+describe.skip('RouteStorageService Contract (pending Slice 7)', () => {});

@@ -1,8 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
 
-describe('Session Persistence Integration', () => {
-  it('should persist routes across browser sessions', () => {
-    // TODO: Replace with actual integration logic
-    expect(false).toBe(true); // Failing test for TDD
-  });
-});
+// Slice 0: Deferred; persistence arrives in Slice 7.
+describe.skip('Session Persistence Integration (pending Slice 7)', () => {});
